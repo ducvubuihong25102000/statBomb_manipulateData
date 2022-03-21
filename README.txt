@@ -1,0 +1,2 @@
+env\Scripts\activate --> to activate python virtual environment to run this project
+[DONE 21/03/2022] finish to convert nested dictionary inside dictionary but can't manipulate when dictionary's item is a list
