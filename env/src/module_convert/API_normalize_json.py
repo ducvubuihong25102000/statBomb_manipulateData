@@ -7,6 +7,8 @@ from collections import (
     defaultdict,
 )
 import copy
+import encodings
+from turtle import back
 from typing import (
     Any,
     DefaultDict,
@@ -15,6 +17,8 @@ from typing import (
 
 import numpy as np
 import json
+import time
+from pathlib import Path
 
 from pandas._libs.writers import convert_json_to_lines
 from pandas._typing import Scalar
@@ -519,82 +523,23 @@ def _json_normalize(
 
 
 #######-------------------------TESTING---------------------------------------------------------------------
-temp = {
-    "details": [
-        {
-            "id": "STU001",
-            "name": "Amit Pathak",
-            "age": 24,
-            "results": {
-                "school": 85,
-                "high_school": 75,
-                "graduation": 70
-            },
-            "education": {
-                "graduation": {
-                    "major": "Computers",
-                    "minor": "Sociology"
-                }
-            }
-        },
-        {
-            "id": "STU002",
-            "name": "Yash Kotian",
-            "age": 32,
-            "results": {
-                "school": 80,
-                "high_school": 58,
-                "graduation": 49
-            },
-            "education": {
-                "graduation": {
-                    "major": "Biology",
-                    "minor": "Chemistry"
-                }
-            }
-        },
-        {
-            "id": "STU003",
-            "name": "Aanchal Singh",
-            "age": 28,
-            "results": {
-                "school": 90,
-                "high_school": 70,
-                "graduation":65
-            },
-            "education": {
-                "graduation": {
-                    "major": "Art",
-                    "minor": "IT"
-                }
-            }
-        },
-        {
-            "id": "STU004",
-            "name": "Juhi Vadia",
-            "age": 23,
-            "results": {
-                "school": 95,
-                "high_school": 89,
-                "graduation": 83
-            },
-            "education": {
-                "graduation": {
-                    "major": "IT",
-                    "minor": "Social"
-                }
-            }
-        }
-    ]
-}
 
 
+u = 3795506
+start_time = time.time()
 
-df = json.load(open(r'D:\code\Anlyze_github\env\src\data\7430.json'))
-result = json_normalize(df)
-#print(result.keys())
-result_1 = json_normalize(result["lineup"])
-print(result_1.keys())
-# result_1 = json_normalize(result["lineup"])
+for i in range(7430,3795506 ):
+    path = fr'D:\code\DataAnalyze\soccer_data\open-data\data\lineups\\{i}.json'  
+    if(Path(path).is_file()):
+        data = json.load(open(Path(path),encoding='utf8'))
+        # data = list(pd.read_json(path))
+        data_normalize = json_normalize(data,"lineup",max_level=4)
+        #print(data_normalize)
+        df = pd.DataFrame(data_normalize)
+        df.to_csv(fr'D:\code\DataAnalyze\soccer_data\data_convert\\{i}_converted.csv',index=None)
+        print(f'{i} file is converted')
 
-# data = result.to_csv(r'D:\code\Anlyze_github\env\src\data_converted\convert.csv')
+print('Converting is done')
+print('time spend %s seconds'%(time.time()-start_time))
+
+
